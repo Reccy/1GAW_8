@@ -7,7 +7,7 @@ public class Bullet : MonoBehaviour
     [Range(1, 16)] [SerializeField] private int m_delayFrames = 8;
     private int m_currentDelayFrames;
 
-    private GameObject m_overlappingWall = null;
+    private Wall m_overlappingWall = null;
 
     [SerializeField] private GameObject m_unstableTilePrefab = null;
 
@@ -16,6 +16,7 @@ public class Bullet : MonoBehaviour
     public Vector2Int DownPosition => CurrentPosition + Vector2Int.down;
     public Vector2Int LeftPosition => CurrentPosition + Vector2Int.left;
     public Vector2Int RightPosition => CurrentPosition + Vector2Int.right;
+    public Vector2Int ExtendedPosition => CurrentPosition + new Vector2Int(Mathf.RoundToInt(transform.up.x), Mathf.RoundToInt(transform.up.y)) * 2;
 
     private void Awake()
     {
@@ -31,14 +32,19 @@ public class Bullet : MonoBehaviour
 
         if (OverlapsWall(CurrentPosition))
         {
-            Destroy(m_overlappingWall);
-            Destroy(gameObject);
+            if (!m_overlappingWall.Impenetrable)
+            {
+                Destroy(m_overlappingWall.gameObject);
 
-            CreateUnstableTile(CurrentPosition);
-            CreateUnstableTile(UpPosition);
-            CreateUnstableTile(DownPosition);
-            CreateUnstableTile(LeftPosition);
-            CreateUnstableTile(RightPosition);
+                CreateUnstableTile(CurrentPosition);
+                CreateUnstableTile(UpPosition);
+                CreateUnstableTile(DownPosition);
+                CreateUnstableTile(LeftPosition);
+                CreateUnstableTile(RightPosition);
+                CreateUnstableTile(ExtendedPosition);
+            }
+
+            Destroy(gameObject);
 
             return;
         }
@@ -61,9 +67,11 @@ public class Bullet : MonoBehaviour
         {
             Collider2D col = cols[i];
 
-            if (col.GetComponentInChildren<Wall>())
+            Wall wall = col.GetComponentInChildren<Wall>();
+
+            if (!!wall)
             {
-                m_overlappingWall = col.gameObject;
+                m_overlappingWall = wall;
                 return true;
             }
         }

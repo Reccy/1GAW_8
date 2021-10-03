@@ -4,4 +4,5 @@ using UnityEngine;
 
 public class Wall : MonoBehaviour
 {
+    [SerializeField] public bool Impenetrable = false;
 }
