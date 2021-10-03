@@ -8,7 +8,9 @@ public class Level1Text : MonoBehaviour
     private TMP_Text m_text;
     private PlayerController m_pc;
 
-    private enum State { START, PICKUP_AMMO, FIRED_GUN, DEAD }
+    private Vector3Int m_initialPosition;
+
+    private enum State { START, MOVED, PICKUP_AMMO, FIRED_GUN, DEAD }
     private State m_state = State.START;
 
     private void Awake()
@@ -17,9 +19,25 @@ public class Level1Text : MonoBehaviour
         m_pc = FindObjectOfType<PlayerController>();
     }
 
+    private void Start()
+    {
+        m_initialPosition = m_pc.CurrentTilePos;
+    }
+
     private void Update()
     {
         if (m_state == State.START)
+        {
+            if (m_pc.CurrentTilePos != m_initialPosition)
+            {
+                m_text.text = "Pickup the ammo";
+
+                m_state = State.MOVED;
+            }
+
+        }
+
+        if (m_state == State.MOVED)
         {
             if (m_pc.Ammo > 0)
             {

@@ -474,7 +474,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: MAZE COLLAPSE
+  m_text: UNSTABLE DUNGEON
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a1d54fbbb7344cc4bbe2fad483ab5386, type: 2}
   m_sharedMaterial: {fileID: -2324664676931868897, guid: a1d54fbbb7344cc4bbe2fad483ab5386, type: 2}
@@ -608,7 +608,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: For Ludum Dare 49 and 1 Game a Week
+  m_text: For Ludum Dare 49 & 1 Game a Week
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a1d54fbbb7344cc4bbe2fad483ab5386, type: 2}
   m_sharedMaterial: {fileID: -2324664676931868897, guid: a1d54fbbb7344cc4bbe2fad483ab5386, type: 2}
