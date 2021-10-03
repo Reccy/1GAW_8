@@ -56,12 +56,22 @@ public class PlayerController : MonoBehaviour
         ClearInputFlags();
     }
 
-    private bool TileIsFree(Vector3Int tilePos)
+    private bool TileIsWalkable(Vector3Int tilePos)
     {
         Vector2Int pos = new Vector2Int(tilePos.x, tilePos.y);
         Collider2D[] cols = Physics2D.OverlapBoxAll(pos, Vector2.one * 0.5f, 0);
 
-        return cols.Length == 0;
+        for(int i = 0; i < cols.Length; ++i)
+        {
+            Collider2D col = cols[i];
+
+            if (col.GetComponentInChildren<Wall>())
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private void Shoot()
@@ -86,19 +96,19 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        if (m_inputMoveUp && TileIsFree(UpTilePos))
+        if (m_inputMoveUp && TileIsWalkable(UpTilePos))
         {
             transform.position += Vector3.up;
         }
-        else if (m_inputMoveDown && TileIsFree(DownTilePos))
+        else if (m_inputMoveDown && TileIsWalkable(DownTilePos))
         {
             transform.position += Vector3.down;
         }
-        else if (m_inputMoveLeft && TileIsFree(LeftTilePos))
+        else if (m_inputMoveLeft && TileIsWalkable(LeftTilePos))
         {
             transform.position += Vector3.left;
         }
-        else if (m_inputMoveRight && TileIsFree(RightTilePos))
+        else if (m_inputMoveRight && TileIsWalkable(RightTilePos))
         {
             transform.position += Vector3.right;
         }
