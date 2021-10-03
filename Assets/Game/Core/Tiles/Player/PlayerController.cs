@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
     private bool m_dead = false;
     public bool IsDead => m_dead;
 
+    public int Ammo = 3;
+
     [SerializeField] private GameObject m_bulletPrefab;
 
     private void Awake()
@@ -87,21 +89,35 @@ public class PlayerController : MonoBehaviour
 
     private void Shoot()
     {
+        if (Ammo <= 0)
+            return;
+
+        bool shot = false;
+
         if (m_inputShootUp)
         {
             Instantiate(m_bulletPrefab, transform.position, Quaternion.Euler(0, 0, 0));
+            shot = true;
         }
         else if (m_inputShootDown)
         {
             Instantiate(m_bulletPrefab, transform.position, Quaternion.Euler(0, 0, 180));
+            shot = true;
         }
         else if (m_inputShootLeft)
         {
             Instantiate(m_bulletPrefab, transform.position, Quaternion.Euler(0, 0, 90));
+            shot = true;
         }
         else if (m_inputShootRight)
         {
             Instantiate(m_bulletPrefab, transform.position, Quaternion.Euler(0, 0, 270));
+            shot = true;
+        }
+
+        if (shot)
+        {
+            Ammo -= 1;
         }
     }
 
