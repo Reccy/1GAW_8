@@ -79,9 +79,8 @@ public class Bullet : MonoBehaviour
         {
             Collider2D col = cols[i];
 
-            if (col.GetComponentInChildren<UnstableTile>())
+            if (col.GetComponentInChildren<UnstableTile>() || col.GetComponentInChildren<TrapTile>())
             {
-                m_overlappingWall = col.gameObject;
                 return true;
             }
         }

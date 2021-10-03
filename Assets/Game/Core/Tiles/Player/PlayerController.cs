@@ -27,6 +27,9 @@ public class PlayerController : MonoBehaviour
     public Vector3Int LeftTilePos => m_currentTilePos + Vector3Int.left;
     public Vector3Int RightTilePos => m_currentTilePos + Vector3Int.right;
 
+    private bool m_dead = false;
+    public bool IsDead => m_dead;
+
     [SerializeField] private GameObject m_bulletPrefab;
 
     private void Awake()
@@ -51,9 +54,17 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (IsDead)
+            return;
+
         Shoot();
         Move();
         ClearInputFlags();
+    }
+
+    public void Kill()
+    {
+        m_dead = true;
     }
 
     private bool TileIsWalkable(Vector3Int tilePos)
