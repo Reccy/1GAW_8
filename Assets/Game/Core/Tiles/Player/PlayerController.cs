@@ -15,9 +15,17 @@ public class PlayerController : MonoBehaviour
     private const int PLAYER_ID = 0;
     private Player m_player;
 
+    private Vector3Int m_currentTilePos;
+    public Vector3Int CurrentTilePos => m_currentTilePos;
+    public Vector3Int UpTilePos => m_currentTilePos + Vector3Int.up;
+    public Vector3Int DownTilePos => m_currentTilePos + Vector3Int.down;
+    public Vector3Int LeftTilePos => m_currentTilePos + Vector3Int.left;
+    public Vector3Int RightTilePos => m_currentTilePos + Vector3Int.right;
+
     private void Awake()
     {
         m_player = ReInput.players.GetPlayer(PLAYER_ID);
+        UpdateCurrentTilePos();
     }
 
     private void Update()
@@ -31,29 +39,57 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // Movement
-        if (m_inputMoveUp)
+        Move();
+    }
+
+    private bool TileIsFree(Vector3Int tilePos)
+    {
+        Vector2Int pos = new Vector2Int(tilePos.x, tilePos.y);
+        Collider2D[] cols = Physics2D.OverlapBoxAll(pos, Vector2.one * 0.5f, 0);
+
+        for (int i = 0; i < cols.Length; ++i)
+        {
+            Collider2D col = cols[i];
+
+            Debug.Log(col.name);
+        }
+
+        return cols.Length == 0;
+    }
+
+    private void Move()
+    {
+        if (m_inputMoveUp && TileIsFree(UpTilePos))
         {
             transform.position += Vector3.up;
-            m_inputMoveUp = false;
         }
-
-        if (m_inputMoveDown)
+        else if (m_inputMoveDown && TileIsFree(DownTilePos))
         {
             transform.position += Vector3.down;
-            m_inputMoveDown = false;
         }
-
-        if (m_inputMoveLeft)
+        else if (m_inputMoveLeft && TileIsFree(LeftTilePos))
         {
             transform.position += Vector3.left;
-            m_inputMoveLeft = false;
         }
-
-        if (m_inputMoveRight)
+        else if (m_inputMoveRight && TileIsFree(RightTilePos))
         {
             transform.position += Vector3.right;
-            m_inputMoveRight = false;
         }
+
+        UpdateCurrentTilePos();
+        ClearInputFlags();
+    }
+    
+    private void UpdateCurrentTilePos()
+    {
+        m_currentTilePos = new Vector3Int((int)transform.position.x, (int)transform.position.y, (int)transform.position.z);
+    }
+
+    private void ClearInputFlags()
+    {
+        m_inputMoveUp = false;
+        m_inputMoveDown = false;
+        m_inputMoveLeft = false;
+        m_inputMoveRight = false;
     }
 }
