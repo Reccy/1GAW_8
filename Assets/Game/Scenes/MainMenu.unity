@@ -474,7 +474,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: UNSTABLE DUNGEON
+  m_text: 'RUIN
+
+    ESCAPE'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a1d54fbbb7344cc4bbe2fad483ab5386, type: 2}
   m_sharedMaterial: {fileID: -2324664676931868897, guid: a1d54fbbb7344cc4bbe2fad483ab5386, type: 2}
@@ -608,7 +610,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: For Ludum Dare 49 & 1 Game a Week
+  m_text: For Ludum Dare 49
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a1d54fbbb7344cc4bbe2fad483ab5386, type: 2}
   m_sharedMaterial: {fileID: -2324664676931868897, guid: a1d54fbbb7344cc4bbe2fad483ab5386, type: 2}
@@ -782,7 +784,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AssetsPPU: 8
-  m_RefResolutionX: 128
+  m_RefResolutionX: 137
   m_RefResolutionY: 54
   m_UpscaleRT: 0
   m_PixelSnapping: 1
@@ -848,7 +850,13 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Created by Aaron Meaney
 
-    (@theReccy)'
+    (@theReccy)
+
+
+    Special thanks to Madalin
+    Popa for helping me come up with a name
+
+    (@XtremePrime)'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a1d54fbbb7344cc4bbe2fad483ab5386, type: 2}
   m_sharedMaterial: {fileID: -2324664676931868897, guid: a1d54fbbb7344cc4bbe2fad483ab5386, type: 2}
