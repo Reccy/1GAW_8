@@ -11,6 +11,11 @@ public class UnstableTile : MonoBehaviour
         if (!IsPlayer(collision))
             return;
 
+        Collapse();
+    }
+
+    public void Collapse()
+    {
         Instantiate(m_trapTilePrefab, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }

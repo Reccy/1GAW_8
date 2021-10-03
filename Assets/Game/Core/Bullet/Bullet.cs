@@ -7,7 +7,9 @@ public class Bullet : MonoBehaviour
     [Range(1, 16)] [SerializeField] private int m_delayFrames = 8;
     private int m_currentDelayFrames;
 
+    // lol this is terrible code
     private Wall m_overlappingWall = null;
+    private UnstableTile m_overlappingUnstableTile = null;
 
     [SerializeField] private GameObject m_unstableTilePrefab = null;
 
@@ -36,12 +38,12 @@ public class Bullet : MonoBehaviour
             {
                 Destroy(m_overlappingWall.gameObject);
 
-                CreateUnstableTile(CurrentPosition);
-                CreateUnstableTile(UpPosition);
-                CreateUnstableTile(DownPosition);
-                CreateUnstableTile(LeftPosition);
-                CreateUnstableTile(RightPosition);
-                CreateUnstableTile(ExtendedPosition);
+                DestroyTile(CurrentPosition);
+                DestroyTile(UpPosition);
+                DestroyTile(DownPosition);
+                DestroyTile(LeftPosition);
+                DestroyTile(RightPosition);
+                DestroyTile(ExtendedPosition);
             }
 
             Destroy(gameObject);
@@ -87,7 +89,29 @@ public class Bullet : MonoBehaviour
         {
             Collider2D col = cols[i];
 
-            if (col.GetComponentInChildren<UnstableTile>() || col.GetComponentInChildren<TrapTile>())
+            UnstableTile tile = col.GetComponentInChildren<UnstableTile>();
+
+            if (!!tile)
+            {
+                m_overlappingUnstableTile = tile;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool OverlapsTrapTile(Vector2Int pos)
+    {
+        Collider2D[] cols = Physics2D.OverlapBoxAll(pos, Vector2.one * 0.5f, 0);
+
+        for (int i = 0; i < cols.Length; ++i)
+        {
+            Collider2D col = cols[i];
+
+            TrapTile tile = col.GetComponentInChildren<TrapTile>();
+
+            if (!!tile)
             {
                 return true;
             }
@@ -96,10 +120,16 @@ public class Bullet : MonoBehaviour
         return false;
     }
 
-    private void CreateUnstableTile(Vector2Int pos)
+    private void DestroyTile(Vector2Int pos)
     {
-        if (OverlapsWall(pos) || OverlapsUnstableTile(pos))
+        if (OverlapsWall(pos) || OverlapsTrapTile(pos))
             return;
+
+        if (OverlapsUnstableTile(pos))
+        {
+            m_overlappingUnstableTile.Collapse();
+            return;
+        }
 
         Instantiate(m_unstableTilePrefab, new Vector3(pos.x, pos.y, 0), Quaternion.identity);
     }
