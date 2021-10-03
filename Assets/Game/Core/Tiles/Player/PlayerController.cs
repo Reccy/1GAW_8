@@ -10,6 +10,11 @@ public class PlayerController : MonoBehaviour
     private bool m_inputMoveDown = false;
     private bool m_inputMoveLeft = false;
     private bool m_inputMoveRight = false;
+
+    private bool m_inputShootUp = false;
+    private bool m_inputShootDown = false;
+    private bool m_inputShootLeft = false;
+    private bool m_inputShootRight = false;
     #endregion
 
     private const int PLAYER_ID = 0;
@@ -21,6 +26,8 @@ public class PlayerController : MonoBehaviour
     public Vector3Int DownTilePos => m_currentTilePos + Vector3Int.down;
     public Vector3Int LeftTilePos => m_currentTilePos + Vector3Int.left;
     public Vector3Int RightTilePos => m_currentTilePos + Vector3Int.right;
+
+    [SerializeField] private GameObject m_bulletPrefab;
 
     private void Awake()
     {
@@ -35,11 +42,18 @@ public class PlayerController : MonoBehaviour
         m_inputMoveDown = m_inputMoveDown || m_player.GetButtonDown("MoveDown");
         m_inputMoveLeft = m_inputMoveLeft || m_player.GetButtonDown("MoveLeft");
         m_inputMoveRight = m_inputMoveRight || m_player.GetButtonDown("MoveRight");
+
+        m_inputShootUp = m_inputShootUp || m_player.GetButtonDown("ShootUp");
+        m_inputShootDown = m_inputShootDown || m_player.GetButtonDown("ShootDown");
+        m_inputShootLeft = m_inputShootLeft || m_player.GetButtonDown("ShootLeft");
+        m_inputShootRight = m_inputShootRight || m_player.GetButtonDown("ShootRight");
     }
 
     private void FixedUpdate()
     {
+        Shoot();
         Move();
+        ClearInputFlags();
     }
 
     private bool TileIsFree(Vector3Int tilePos)
@@ -47,14 +61,27 @@ public class PlayerController : MonoBehaviour
         Vector2Int pos = new Vector2Int(tilePos.x, tilePos.y);
         Collider2D[] cols = Physics2D.OverlapBoxAll(pos, Vector2.one * 0.5f, 0);
 
-        for (int i = 0; i < cols.Length; ++i)
-        {
-            Collider2D col = cols[i];
-
-            Debug.Log(col.name);
-        }
-
         return cols.Length == 0;
+    }
+
+    private void Shoot()
+    {
+        if (m_inputShootUp)
+        {
+            Instantiate(m_bulletPrefab, transform.position, Quaternion.Euler(0, 0, 0));
+        }
+        else if (m_inputShootDown)
+        {
+            Instantiate(m_bulletPrefab, transform.position, Quaternion.Euler(0, 0, 180));
+        }
+        else if (m_inputShootLeft)
+        {
+            Instantiate(m_bulletPrefab, transform.position, Quaternion.Euler(0, 0, 90));
+        }
+        else if (m_inputShootRight)
+        {
+            Instantiate(m_bulletPrefab, transform.position, Quaternion.Euler(0, 0, 270));
+        }
     }
 
     private void Move()
@@ -77,12 +104,11 @@ public class PlayerController : MonoBehaviour
         }
 
         UpdateCurrentTilePos();
-        ClearInputFlags();
     }
     
     private void UpdateCurrentTilePos()
     {
-        m_currentTilePos = new Vector3Int((int)transform.position.x, (int)transform.position.y, (int)transform.position.z);
+        m_currentTilePos = new Vector3Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), Mathf.RoundToInt(transform.position.z));
     }
 
     private void ClearInputFlags()
@@ -91,5 +117,10 @@ public class PlayerController : MonoBehaviour
         m_inputMoveDown = false;
         m_inputMoveLeft = false;
         m_inputMoveRight = false;
+
+        m_inputShootUp = false;
+        m_inputShootDown = false;
+        m_inputShootLeft = false;
+        m_inputShootRight = false;
     }
 }
